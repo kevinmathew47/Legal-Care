@@ -123,7 +123,7 @@ const DocAnalyser = () => {
     }
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
@@ -131,6 +131,14 @@ const DocAnalyser = () => {
       setError(null);
       setAnalysisResult("");
       setExtractedText("");
+      
+      // Pre-extract text for preview
+      try {
+        const text = await extractFileContent(selectedFile);
+        setExtractedText(text);
+      } catch (err) {
+        console.error("Text extraction failed for preview:", err);
+      }
     }
   };
 
@@ -170,7 +178,7 @@ const DocAnalyser = () => {
       
       // Document is legal, fetch brief description via Gemini
       const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-3-flash-preview",
         systemInstruction:
           "You are pretending to be a legal advisor. You will provide answers based on Indian law. Do not answer vaguely. Give clear steps on how the user can proceed. Refer to yourself as legal advisor. Only provide the legal side of the queries.",
         generationConfig: {
@@ -337,12 +345,36 @@ ${fileContent}`;
                   </span>
                 </div>
               </div>
-              <div className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700/50">
-                <iframe
-                  src={fileURL}
-                  className="w-full h-96"
-                  title="Uploaded Document"
-                />
+              <div className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700/50 h-96">
+                {file?.type === "application/pdf" ? (
+                  <div className="w-full h-full relative">
+                    <iframe
+                      src={fileURL}
+                      className="w-full h-full"
+                      title="Uploaded Document"
+                    />
+                    {/* Fallback info for if the iframe fails to load or if the user wants to see the raw text */}
+                    {!extractedText && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm pointer-events-none">
+                        <div className="flex flex-col items-center space-y-2">
+                          <FaSpinner className="animate-spin text-2xl text-purple-400" />
+                          <p className="text-slate-400 text-sm">Loading preview...</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="p-6 h-full overflow-y-auto font-mono text-sm text-slate-300 scrollbar-thin scrollbar-thumb-slate-700">
+                    {extractedText ? (
+                      <div className="whitespace-pre-wrap">{extractedText}</div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full space-y-4">
+                        <FaSpinner className="animate-spin text-4xl text-purple-400" />
+                        <p className="text-slate-400">Extracting document content...</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 

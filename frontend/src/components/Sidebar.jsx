@@ -1,29 +1,21 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   FaHome,
   FaFileAlt,
   FaFileSignature,
   FaRobot,
-  FaSignOutAlt,
   FaChevronLeft,
   FaChevronRight,
-  FaSearch,
   FaBalanceScale,
 } from "react-icons/fa";
 
-const Sidebar = ({ onLogout }) => {
+const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   const handleToggle = () => {
     setIsCollapsed(!isCollapsed);
-  };
-
-  const handleLogout = () => {
-    onLogout();
-    navigate("/auth");
   };
 
   const menuItems = [
@@ -104,19 +96,6 @@ const Sidebar = ({ onLogout }) => {
 
       {/* Bottom Actions */}
       <div className="border-t border-slate-700/50 p-3 space-y-2">
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className={`group flex items-center w-full rounded-xl px-4 py-3 text-slate-300 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 ${
-            isCollapsed ? "justify-center" : ""
-          }`}
-        >
-          <FaSignOutAlt className="text-lg group-hover:scale-110 transition-transform" />
-          {!isCollapsed && (
-            <span className="ml-4 font-medium text-sm">Logout</span>
-          )}
-        </button>
-
         <button
           onClick={handleToggle}
           className={`group flex items-center w-full rounded-xl px-4 py-3 text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all duration-200 ${

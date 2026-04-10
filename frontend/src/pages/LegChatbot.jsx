@@ -21,7 +21,7 @@ const sendToBackend = async (message) => {
 };
 
 const LegChatbot = () => {
-  const userId = window.localStorage.getItem("USER") || "default-user";
+  const userId = "default-user";
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
