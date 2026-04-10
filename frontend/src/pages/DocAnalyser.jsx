@@ -156,7 +156,7 @@ const DocAnalyser = () => {
       const fileContent = await extractFileContent(file);
       setExtractedText(fileContent);
 
-      const response = await fetch("/api/ml/analyze_document", {
+      const response = await fetch("/_/backend/api/ml/analyze_document", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

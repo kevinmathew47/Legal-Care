@@ -6,7 +6,7 @@ import { FaPaperPlane, FaTrash, FaRobot, FaUser, FaSpinner } from "react-icons/f
 // 🔹 New helper: call your backend AI endpoint instead of Gemini directly
 const sendToBackend = async (message) => {
   try {
-    const response = await axios.post("/api/vertex", {
+    const response = await axios.post("/_/backend/api/vertex", {
       message,
     });
     // backend returns: { content: "..." }
@@ -35,7 +35,7 @@ const LegChatbot = () => {
   const saveMessagesToBackend = async (updatedMessages) => {
     try {
       const response = await axios.post(
-        `/api/conversations/${userId}`,
+        `/_/backend/api/conversations/${userId}`,
         {
           messages: updatedMessages,
         }
@@ -54,7 +54,7 @@ const LegChatbot = () => {
     setIsLoading(true);
     try {
       await axios.post(
-        `/api/conversations/${userId}/clear`
+        `/_/backend/api/conversations/${userId}/clear`
       );
       setMessages([]);
       setError(null);
@@ -73,7 +73,7 @@ const LegChatbot = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `/api/conversations/${userId}`
+        `/_/backend/api/conversations/${userId}`
       );
       console.log("Fetched messages:", response.data);
       const fetchedMessages = Array.isArray(response.data)

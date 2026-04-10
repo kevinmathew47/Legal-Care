@@ -18,6 +18,11 @@ app.use("/api", chatRoutes);
 app.use("/api", chat2Routes);
 app.use("/api/ml", mlRoutes);
 
+// Compatibility with Vercel routePrefix
+app.use("/_/backend/api", chatRoutes);
+app.use("/_/backend/api", chat2Routes);
+app.use("/_/backend/api/ml", mlRoutes);
+
 const PORT = process.env.PORT || 5000;
 mongoose
   .connect(

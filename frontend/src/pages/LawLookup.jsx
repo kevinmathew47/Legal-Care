@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 
 const sendToVertex = async (message) => {
   try {
-    const response = await axios.post("/api/vertex", {
+    const response = await axios.post("/_/backend/api/vertex", {
       message,
     });
     return response.data.content; // Extract the text from the backend response
